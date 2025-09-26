@@ -1,10 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const Database = require('better-sqlite3');
-const { nanoid } = require('nanoid');
+
 
 const app = express();
 app.use(bodyParser.json());
+const generateFolio = () => `L-${Math.random().toString(36).slice(2, 10).toUpperCase()}`;
 
 
 const db = new Database('./db/licencias.db');
@@ -32,7 +33,7 @@ app.post('/licenses', (req, res) => {
     return res.status(400).json({ error: "INVALID_DAYS" });
   }
 
-  const folio = `L-${nanoid(8)}`;
+  const folio = generateFolio();
   const stmt = db.prepare(`
     INSERT INTO licenses (folio, patientId, doctorId, diagnosis, startDate, days, status)
     VALUES (?, ?, ?, ?, ?, ?, ?)
