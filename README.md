@@ -1,11 +1,11 @@
-#Levantamiento del sistema
+Levantamiento del sistema
 
 Construir imágenes y levantar servicios:
 
 docker compose up --build -d licencias portal-paciente validador-aseguradora
 
 
-#Para verificar que los servicios están corriendo:
+Para verificar que los servicios están corriendo:
 
 docker compose ps
 
@@ -13,7 +13,7 @@ docker compose ps
 Deben aparecer los 3 contenedores en estado running.
 
 
-#Ejecutar las pruebas de consumidores:
+Ejecutar las pruebas de consumidores:
 
 docker compose run --rm consumer-tests
 
@@ -22,7 +22,7 @@ Los contratos generados quedarán en la carpeta:
 
 ./pacts/*.json
 
-#Verificación del proveedor
+Verificación del proveedor
 
 Ejecutar la verificación de Pact en el servicio Licencias:
 
