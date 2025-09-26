@@ -28,7 +28,7 @@ Ejecutar la verificación de Pact en el servicio Licencias:
 
 docker compose run --rm verify-licencias
 
-#Desafios de la actividad
+Desafios de la actividad
 
 los mayores desafios de esta actividad fueron :
 
