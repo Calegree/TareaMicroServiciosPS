@@ -43,15 +43,19 @@ services:
     networks:
       - app-network
 
+  # Servicio unificado para ejecutar todas las pruebas de contrato
   consumer-tests:
-    build: ./TareaMicroPaciente
+    build: 
+      context: .
+      dockerfile: Dockerfile.pact-tests
     container_name: consumer-tests
     ports:
       - "3002:3002"  # Puerto para Pact del Portal Paciente
       - "3004:3004"  # Puerto para Pact del Validador Aseguradora
       - "3005:3005"  # Puerto para Pact del Médico App
     volumes:
-      - ./pacts:/app/pacts    # carpeta donde se generan los contratos Pact
+      - ./pacts:/app/pacts
+      - ./logs:/app/logs
     environment:
       - NODE_ENV=test
     depends_on:

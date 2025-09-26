@@ -1,0 +1,39 @@
+FROM node:18-alpine
+
+# Instalar dependencias del sistema
+RUN apk add --no-cache python3 make g++ sqlite
+
+WORKDIR /app
+
+# Copiar todos los package.json
+COPY TareaMicroPaciente/package*.json ./TareaMicroPaciente/
+COPY TareaMicroValidadorAseguradora/package*.json ./TareaMicroValidadorAseguradora/
+COPY TareaMicroProveedor/package*.json ./TareaMicroProveedor/
+
+# Instalar dependencias de todos los servicios
+WORKDIR /app/TareaMicroPaciente
+RUN npm install
+
+WORKDIR /app/TareaMicroValidadorAseguradora
+RUN npm install
+
+WORKDIR /app/TareaMicroProveedor
+RUN npm install
+
+# Copiar código fuente de todos los servicios
+WORKDIR /app
+COPY TareaMicroPaciente/ ./TareaMicroPaciente/
+COPY TareaMicroValidadorAseguradora/ ./TareaMicroValidadorAseguradora/
+COPY TareaMicroProveedor/ ./TareaMicroProveedor/
+
+# Copiar script maestro
+COPY run-all-pact-tests.js ./
+
+# Crear directorios necesarios
+RUN mkdir -p pacts logs
+
+# Hacer ejecutable el script
+RUN chmod +x run-all-pact-tests.js
+
+# Comando por defecto
+CMD ["node", "run-all-pact-tests.js"]

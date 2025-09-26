@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "test:pact": "jest --testPathPattern=pact"
   },
   "keywords": [],
   "author": "",
@@ -14,7 +15,8 @@
   "dependencies": {
     "express": "^5.1.0",
     "body-parser": "^1.20.2",
-    "sqlite3": "^5.1.6"
+    "sqlite3": "^5.1.6",
+    "axios": "^1.6.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.10",

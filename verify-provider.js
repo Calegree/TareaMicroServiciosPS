@@ -9,7 +9,10 @@ try {
   execSync('curl -f http://localhost:3000/health', { stdio: 'inherit' });
   console.log('✅ Servicio de Licencias está funcionando\n');
   
-  // Aquí podrías agregar más verificaciones específicas del proveedor
+  // Verificar que los contratos se generaron
+  console.log('📄 Verificando contratos generados:');
+  execSync('ls -la pacts/', { stdio: 'inherit' });
+  
   console.log('🎉 Verificación del proveedor completada');
 } catch (error) {
   console.error('❌ Error verificando el proveedor:', error.message);
