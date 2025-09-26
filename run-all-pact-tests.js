@@ -17,7 +17,9 @@ try {
 function runPactTests(serviceName, servicePath) {
   console.log(`📋 Ejecutando pruebas de ${serviceName}...`);
   try {
-    execSync(`cd ${servicePath} && npm run test:pact`, { 
+    // Usar node directamente con el archivo jest - CORREGIDO: no duplicar el path
+    const jestPath = path.join('node_modules', 'jest', 'bin', 'jest.js');
+    execSync(`cd ${servicePath} && node ${jestPath} --testPathPattern=pact`, { 
       stdio: 'inherit',
       env: { ...process.env, NODE_ENV: 'test' }
     });
