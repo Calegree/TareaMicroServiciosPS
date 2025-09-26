@@ -36,7 +36,8 @@ Uso de Pact
 
 El trabajo con Pact resultó dificil, especialmente al inicio, implicó comprender la dinámica de Consumer-Driven Contracts y la correcta configuración de los tests de consumidor. Esto generó algunos problemas en la generación y verificación de los contratos, los cuales requirieron ajustes en la configuración mas allá de lo esperado.
 
-Orquestación de contenedores con docker compose:
+Orquestación de contenedores con docker compose
+
 La orquestación de múltiples servicios utilizando Docker Compose fue otro apartado complejo, hubo muchos problemas por la ejecución en paralelo de los tres microservicios, principalmente conflictos de permisos y recursos compartidos, lo que dificultó el flujo esperado de generación de contratos y verificación con Pact.
 
 Integrantes:
