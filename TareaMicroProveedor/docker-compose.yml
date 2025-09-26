@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  licencias:
+    build: ./TareaMicroProveedor
+    container_name: licencias-service
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./TareaMicroProveedor/db:/usr/src/app/db
+    environment:
+      - NODE_ENV=production
