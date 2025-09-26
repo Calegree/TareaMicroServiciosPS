@@ -1,48 +1,61 @@
-version: "3.8"
+version: "3.9"
+
 services:
   licencias:
-    build: ./licencias
+    build: ./TareaMicroProveedor
+    container_name: licencias
     ports:
       - "3000:3000"
+    environment:
+      - NODE_ENV=development
     volumes:
-      - ./licencias/db:/app/db
+      - ./TareaMicroProveedor/db:/app/db
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/health || exit 1"]
       interval: 5s
       retries: 5
+    networks:
+      - app-network
 
   portal-paciente:
-    build: ./portal-paciente
+    build: ./TareaMicroPaciente
+    container_name: portal-paciente
     ports:
-      - "3001:3000"
+      - "4000:3001"
+    environment:
+      - NODE_ENV=development
+      - LICENSES_SERVICE_URL=http://licencias:3000
     depends_on:
       - licencias
+    networks:
+      - app-network
 
   validador-aseguradora:
-    build: ./validador-aseguradora
+    build: ./TareaMicroValidadorAseguradora
+    container_name: validador-aseguradora
     ports:
-      - "3002:3000"
+      - "5000:3003"
+    environment:
+      - NODE_ENV=development
+      - LICENSES_SERVICE_URL=http://licencias:3000
     depends_on:
       - licencias
+    networks:
+      - app-network
 
   consumer-tests:
-    build: ./consumer-tests
+    build: ./TareaMicroPaciente
+    container_name: consumer-tests
     volumes:
-      - ./pacts:/pacts
+      - ./pacts:/app/pacts    # carpeta donde se generan los contratos Pact
+    environment:
+      - NODE_ENV=test
     depends_on:
       - licencias
-    entrypoint: ["tail", "-f", "/dev/null"] # para que no se cierre; correr tests con docker compose run --rm consumer-tests npm test
+    networks:
+      - app-network
+    # no arrancar automáticamente, se ejecuta con: docker compose run --rm consumer-tests
 
-  verify-licencias:
-    image: pactfoundation/pact-cli:latest
-    volumes:
-      - ./pacts:/pacts
-    depends_on:
-      - licencias
-    entrypoint: []
-    command:
-      - "verify"
-      - "/pacts/*.json"
-      - "--provider-base-url=http://licencias:3000"
-      - "--provider-states-url=http://licencias:3000/_pactState"
-      - "--verbose"
+networks:
+  app-network:
+    driver: bridge

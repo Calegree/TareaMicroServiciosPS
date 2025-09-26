@@ -16,7 +16,7 @@
   "dependencies": {
     "express": "^5.1.0",
     "axios": "^1.6.0",
-    "sqlite3": "^5.1.6",
+    "better-sqlite3": "^9.0.0",
     "cors": "^2.8.5"
   },
   "devDependencies": {

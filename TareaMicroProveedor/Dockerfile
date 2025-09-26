@@ -1,5 +1,7 @@
-# Imagen base de Node.js
 FROM node:18-alpine
+
+# Instalar dependencias para compilación nativa
+RUN apk add --no-cache python3 make g++ sqlite
 
 # Crear directorio de la app
 WORKDIR /usr/src/app
@@ -7,13 +9,17 @@ WORKDIR /usr/src/app
 # Copiar package.json y package-lock.json
 COPY package*.json ./
 
+# Limpiar caché y reinstalar
+RUN npm cache clean --force
+RUN rm -rf node_modules package-lock.json
+
 # Instalar dependencias
-RUN npm install --production
+RUN npm install
 
 # Copiar el resto del código
 COPY . .
 
-# Crear carpeta para la base de datos (persistencia)
+# Crear carpeta para la base de datos
 RUN mkdir -p /usr/src/app/db
 
 # Exponer el puerto
