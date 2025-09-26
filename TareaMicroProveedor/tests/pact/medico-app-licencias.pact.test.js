@@ -7,6 +7,7 @@ const provider = new Pact({
   consumer: 'Médico App',
   provider: 'Licencias',
   port: 3005,
+  host: '0.0.0.0', // Cambio importante: usar 0.0.0.0 en lugar de localhost
   log: path.resolve(process.cwd(), 'logs', 'pact.log'),
   dir: path.resolve(process.cwd(), 'pacts'),
   logLevel: 'INFO',
@@ -58,7 +59,7 @@ describe('Médico App - Licencias API', () => {
       });
 
       it('should create a valid license', async () => {
-        const response = await axios.post('http://localhost:3005/licenses', {
+        const response = await axios.post('http://0.0.0.0:3005/licenses', { // Cambio: usar 0.0.0.0
           patientId: '11111111-1',
           doctorId: 'D-001',
           diagnosis: 'Gripe común',
@@ -113,7 +114,7 @@ describe('Médico App - Licencias API', () => {
 
       it('should reject license creation with days <= 0', async () => {
         try {
-          await axios.post('http://localhost:3005/licenses', {
+          await axios.post('http://0.0.0.0:3005/licenses', { // Cambio: usar 0.0.0.0
             patientId: '11111111-1',
             doctorId: 'D-001',
             diagnosis: 'Gripe común',
