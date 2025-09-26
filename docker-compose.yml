@@ -1,0 +1,48 @@
+version: "3.8"
+services:
+  licencias:
+    build: ./licencias
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./licencias/db:/app/db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health || exit 1"]
+      interval: 5s
+      retries: 5
+
+  portal-paciente:
+    build: ./portal-paciente
+    ports:
+      - "3001:3000"
+    depends_on:
+      - licencias
+
+  validador-aseguradora:
+    build: ./validador-aseguradora
+    ports:
+      - "3002:3000"
+    depends_on:
+      - licencias
+
+  consumer-tests:
+    build: ./consumer-tests
+    volumes:
+      - ./pacts:/pacts
+    depends_on:
+      - licencias
+    entrypoint: ["tail", "-f", "/dev/null"] # para que no se cierre; correr tests con docker compose run --rm consumer-tests npm test
+
+  verify-licencias:
+    image: pactfoundation/pact-cli:latest
+    volumes:
+      - ./pacts:/pacts
+    depends_on:
+      - licencias
+    entrypoint: []
+    command:
+      - "verify"
+      - "/pacts/*.json"
+      - "--provider-base-url=http://licencias:3000"
+      - "--provider-states-url=http://licencias:3000/_pactState"
+      - "--verbose"
