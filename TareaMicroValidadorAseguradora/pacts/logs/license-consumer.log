@@ -1,0 +1,14 @@
+I, [2025-09-26T00:46:19.828887 #31627]  INFO -- : Registered expected interaction GET /licenses/L-1001/verify
+I, [2025-09-26T00:46:19.882520 #31627]  INFO -- : Received request GET /licenses/L-1001/verify
+I, [2025-09-26T00:46:19.882979 #31627]  INFO -- : Found matching response for GET /licenses/L-1001/verify
+I, [2025-09-26T00:46:19.891163 #31627]  INFO -- : Registered expected interaction GET /licenses/L-404/verify
+I, [2025-09-26T00:46:19.936357 #31627]  INFO -- : Received request GET /licenses/L-404/verify
+I, [2025-09-26T00:46:19.936706 #31627]  INFO -- : Found matching response for GET /licenses/L-404/verify
+I, [2025-09-26T00:46:20.026398 #31627]  INFO -- : Registered expected interaction GET /licenses?patientId=11111111-1
+I, [2025-09-26T00:46:20.030816 #31627]  INFO -- : Received request GET /licenses?patientId=11111111-1
+I, [2025-09-26T00:46:20.031345 #31627]  INFO -- : Found matching response for GET /licenses?patientId=11111111-1
+I, [2025-09-26T00:46:20.038442 #31627]  INFO -- : Registered expected interaction GET /licenses?patientId=22222222-2
+W, [2025-09-26T00:46:20.038689 #31627]  WARN -- : You currently have 4 interactions mocked at the same time. This suggests the scope of your consumer tests is larger than recommended, and you may find them hard to debug and maintain. See https://pact.io/too-many-interactions for more information.
+I, [2025-09-26T00:46:20.083914 #31627]  INFO -- : Received request GET /licenses?patientId=22222222-2
+I, [2025-09-26T00:46:20.084652 #31627]  INFO -- : Found matching response for GET /licenses?patientId=22222222-2
+I, [2025-09-26T00:46:20.089379 #31627]  INFO -- : Writing pact for Licencias to /home/charles-darwin/PruebasSoft/TareaMicroServiciosPS/TareaMicroValidadorAseguradora/pacts/validador_aseguradora-licencias.json

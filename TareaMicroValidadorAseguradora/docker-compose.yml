@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  validador-aseguradora:
+    build: .
+    ports:
+      - "3003:3003"
+    environment:
+      - PORT=3003
+      - LICENSES_SERVICE_URL=http://licencias:3001
+    depends_on:
+      - licencias
+    networks:
+      - microservices
+
+  licencias:
+    image: node:18-alpine
+    working_dir: /app
+    command: >
+      sh -c "npm install express && node -e \"
+      const express = require('express');
+      const app = express();
+      app.use(express.json());
+      
+      // Mock data
+      const licenses = new Map();
+      licenses.set('L-1001', {
+        folio: 'L-1001',
+        patientId: '11111111-1',
+        doctorId: 'D-001',
+        diagnosis: 'Gripe',
+        startDate: '2024-01-01',
+        days: 7,
+        status: 'issued'
+      });
+      
+      // Endpoints
+      app.get('/licenses/:folio/verify', (req, res) => {
+        const license = licenses.get(req.params.folio);
+        if (license) {
+          res.json({ valid: true });
+        } else {
+          res.status(404).json({ valid: false });
+        }
+      });
+      
+      app.get('/licenses', (req, res) => {
+        const patientId = req.query.patientId;
+        if (patientId === '11111111-1') {
+          res.json([licenses.get('L-1001')]);
+        } else {
+          res.json([]);
+        }
+      });
+      
+      app.listen(3001, () => console.log('Licencias service running on 3001'));
+      \""
+    ports:
+      - "3001:3001"
+    networks:
+      - microservices
+
+  consumer-tests:
+    build: .
+    command: npm run test:pact
+    volumes:
+      - ./pacts:/app/pacts
+    depends_on:
+      - licencias
+    networks:
+      - microservices
+
+networks:
+  microservices:
+    driver: bridge

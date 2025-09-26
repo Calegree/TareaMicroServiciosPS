@@ -1,0 +1,122 @@
+{
+  "consumer": {
+    "name": "Validador Aseguradora"
+  },
+  "provider": {
+    "name": "Licencias"
+  },
+  "interactions": [
+    {
+      "description": "a request to verify an existing license",
+      "providerState": "issued license L-1001 exists",
+      "request": {
+        "method": "GET",
+        "path": "/licenses/L-1001/verify"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "valid": true
+        }
+      }
+    },
+    {
+      "description": "a request to verify a non-existing license",
+      "providerState": "license L-404 does not exist",
+      "request": {
+        "method": "GET",
+        "path": "/licenses/L-404/verify"
+      },
+      "response": {
+        "status": 404,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "valid": false
+        }
+      }
+    },
+    {
+      "description": "a request for patient licenses",
+      "providerState": "patient 11111111-1 has issued license folio L-1001",
+      "request": {
+        "method": "GET",
+        "path": "/licenses",
+        "query": "patientId=11111111-1"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": [
+          {
+            "folio": "L-1001",
+            "patientId": "11111111-1",
+            "doctorId": "D-001",
+            "diagnosis": "Gripe",
+            "startDate": "2024-01-01",
+            "days": 7,
+            "status": "issued"
+          }
+        ],
+        "matchingRules": {
+          "$.body": {
+            "min": 1
+          },
+          "$.body[*].*": {
+            "match": "type"
+          },
+          "$.body[*].folio": {
+            "match": "type"
+          },
+          "$.body[*].patientId": {
+            "match": "type"
+          },
+          "$.body[*].doctorId": {
+            "match": "type"
+          },
+          "$.body[*].diagnosis": {
+            "match": "type"
+          },
+          "$.body[*].startDate": {
+            "match": "type"
+          },
+          "$.body[*].days": {
+            "match": "type"
+          },
+          "$.body[*].status": {
+            "match": "type"
+          }
+        }
+      }
+    },
+    {
+      "description": "a request for patient with no licenses",
+      "providerState": "no licenses for patient 22222222-2",
+      "request": {
+        "method": "GET",
+        "path": "/licenses",
+        "query": "patientId=22222222-2"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": [
+
+        ]
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  }
+}
